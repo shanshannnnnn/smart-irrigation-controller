@@ -7,7 +7,7 @@
  see https://pubsubclient.knolleary.net/api
 */
      #define appname "MoistureSensor"    //  name of your iot application
-     #define clientid "yss6113a"    //  unique id for this client; 8-12 characters
+     #define clientid "device01"    //  unique id for this client; 8-12 characters
      #define device "M"             //  "S" sensor ; "M" sensor+actuator
 
 

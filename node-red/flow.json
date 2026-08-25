@@ -2,7 +2,7 @@
   {
     "id": "e96df431cbedabc0",
     "type": "tab",
-    "label": "44IOT",
+    "label": "Smart Irrigation",
     "disabled": true,
     "info": "",
     "env": []
@@ -12,7 +12,7 @@
     "type": "mqtt in",
     "z": "e96df431cbedabc0",
     "name": "",
-    "topic": "MoistureSensor/yss6113a/M",
+    "topic": "MoistureSensor/device01/M",
     "qos": "2",
     "datatype": "auto-detect",
     "broker": "6ec8dec994ef4b9c",
@@ -80,7 +80,7 @@
     "precisionV18FluxV20": "s",
     "retentionPolicyV18Flux": "",
     "org": "SoE",
-    "bucket": "44IOT",
+    "bucket": "irrigation",
     "x": 560,
     "y": 320,
     "wires": []

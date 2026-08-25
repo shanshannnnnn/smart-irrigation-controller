@@ -152,8 +152,8 @@ uplink topic and runs it through `Extract&Transform` to parse the payload, then:
 - **`mqtt out`** publishes it back to the device to drive the pump
 - **`catch: all`** handles node failures so a bad payload doesn't stall the flow
 
-Grafana reads from InfluxDB to render the dashboard — a live moisture gauge,
-relay status, and history:
+Grafana reads from InfluxDB to render the dashboard. Below, the moisture gauge
+reads 106 — comfortably inside the wet band — and the pump relay is energised:
 
 ![Grafana dashboard](docs/images/grafana-dashboard.png)
 
@@ -173,11 +173,11 @@ board package, plus the libraries above via **Tools → Manage Libraries**.
 **1. Clone and add your credentials**
 
 ```bash
-git clone https://github.com/shanshannnnnn/esp32-soil-moisture-monitor.git
+git clone https://github.com/shanshannnnnn/smart-irrigation-controller.git
 ```
 
 ```bash
-cd esp32-soil-moisture-monitor/soil_moisture_monitor
+cd smart-irrigation-controller/soil_moisture_monitor
 ```
 
 ```bash

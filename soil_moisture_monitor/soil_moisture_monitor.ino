@@ -1,4 +1,4 @@
-/* 44IoT Activities development code */
+/* Smart irrigation controller - ESP32 firmware */
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
 #include <PubSubClient.h>
