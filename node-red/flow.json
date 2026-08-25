@@ -1,0 +1,243 @@
+[
+  {
+    "id": "e96df431cbedabc0",
+    "type": "tab",
+    "label": "44IOT",
+    "disabled": true,
+    "info": "",
+    "env": []
+  },
+  {
+    "id": "3acc350e435ced6f",
+    "type": "mqtt in",
+    "z": "e96df431cbedabc0",
+    "name": "",
+    "topic": "MoistureSensor/yss6113a/M",
+    "qos": "2",
+    "datatype": "auto-detect",
+    "broker": "6ec8dec994ef4b9c",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 260,
+    "y": 220,
+    "wires": [
+      [
+        "edaf69dfc8cabafd",
+        "5166fea88412e00c"
+      ]
+    ]
+  },
+  {
+    "id": "edaf69dfc8cabafd",
+    "type": "debug",
+    "z": "e96df431cbedabc0",
+    "name": "debug 1",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 620,
+    "y": 220,
+    "wires": []
+  },
+  {
+    "id": "5166fea88412e00c",
+    "type": "function",
+    "z": "e96df431cbedabc0",
+    "name": "Extract&Transform",
+    "func": "//Assign properties of msg.payload to variables \nvar sensorv = msg.payload.v   \nsensorv = sensorv/10 \nvar relay= msg.payload.r\n//Extract info from msg.topic \nvar result  = msg.topic.split(\"/\")  //split string to array \n//Form New msg.payload as a JSON array \nmsg.payload = [{    \n    \"sensorv\": sensorv,\n    \"relayState\":relay\n\n}, \n{ \n    //element 2 > Tags \n\"clientid\": result[1], //2nd element of result \n\"device\": result[2]    \n//3rd element of result      \n}];   \nreturn msg; \n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 350,
+    "y": 320,
+    "wires": [
+      [
+        "90ab4e8561d1535f",
+        "edaf69dfc8cabafd",
+        "ce8312e4efb4831f"
+      ]
+    ]
+  },
+  {
+    "id": "90ab4e8561d1535f",
+    "type": "influxdb out",
+    "z": "e96df431cbedabc0",
+    "influxdb": "29c3fa1c3289e8e7",
+    "name": "Logging",
+    "measurement": "moisture",
+    "precision": "",
+    "retentionPolicy": "",
+    "database": "database",
+    "precisionV18FluxV20": "s",
+    "retentionPolicyV18Flux": "",
+    "org": "SoE",
+    "bucket": "44IOT",
+    "x": 560,
+    "y": 320,
+    "wires": []
+  },
+  {
+    "id": "ce8312e4efb4831f",
+    "type": "switch",
+    "z": "e96df431cbedabc0",
+    "name": "",
+    "property": "payload[1].device",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "S",
+        "vt": "str"
+      },
+      {
+        "t": "eq",
+        "v": "M",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 2,
+    "x": 330,
+    "y": 400,
+    "wires": [
+      [
+        "37909ce0160fcaf2"
+      ],
+      [
+        "3272a74fb4b9a0bf"
+      ]
+    ]
+  },
+  {
+    "id": "37909ce0160fcaf2",
+    "type": "function",
+    "z": "e96df431cbedabc0",
+    "name": "powermode",
+    "func": "//create downlink publish topic from received uplink topic \nmsg.topic = \"DL/\" + msg.topic \n//Threshold comparison; create new msg.payload \nif (msg.payload[0].vbat >= 90) { \nmsg.payload = \"HI\"  \n} \nelse { \nmsg.payload = \"LO\" \n} \nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 510,
+    "y": 400,
+    "wires": [
+      [
+        "c0a3b45ecb54bdb6",
+        "edaf69dfc8cabafd"
+      ]
+    ]
+  },
+  {
+    "id": "3272a74fb4b9a0bf",
+    "type": "function",
+    "z": "e96df431cbedabc0",
+    "name": "Actuation",
+    "func": "//create downlink publish topic from received uplink topic \nmsg.topic = \"DL/\" + msg.topic \n//Threshold comparison; create new msg.payload \nif (msg.payload[0].sensorv >= 60) { \nmsg.payload = \"HI\"  \n} \nelse { \nmsg.payload = \"LO\" \n} \nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 500,
+    "y": 480,
+    "wires": [
+      [
+        "c0a3b45ecb54bdb6",
+        "edaf69dfc8cabafd"
+      ]
+    ]
+  },
+  {
+    "id": "c0a3b45ecb54bdb6",
+    "type": "mqtt out",
+    "z": "e96df431cbedabc0",
+    "name": "",
+    "topic": "",
+    "qos": "",
+    "retain": "",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "6ec8dec994ef4b9c",
+    "x": 750,
+    "y": 440,
+    "wires": []
+  },
+  {
+    "id": "a24607dfafec0c11",
+    "type": "catch",
+    "z": "e96df431cbedabc0",
+    "name": "",
+    "scope": null,
+    "uncaught": false,
+    "x": 440,
+    "y": 140,
+    "wires": [
+      [
+        "edaf69dfc8cabafd"
+      ]
+    ]
+  },
+  {
+    "id": "6ec8dec994ef4b9c",
+    "type": "mqtt-broker",
+    "name": "HiveMQ",
+    "broker": "test.mosquitto.org",
+    "port": 1883,
+    "tls": "",
+    "clientid": "",
+    "autoConnect": true,
+    "usetls": false,
+    "protocolVersion": 4,
+    "keepalive": 60,
+    "cleansession": true,
+    "autoUnsubscribe": true,
+    "birthTopic": "",
+    "birthQos": "0",
+    "birthRetain": "false",
+    "birthPayload": "",
+    "birthMsg": {},
+    "closeTopic": "",
+    "closeQos": "0",
+    "closeRetain": "false",
+    "closePayload": "",
+    "closeMsg": {},
+    "willTopic": "",
+    "willQos": "0",
+    "willRetain": "false",
+    "willPayload": "",
+    "willMsg": {},
+    "userProps": "",
+    "sessionExpiry": ""
+  },
+  {
+    "id": "29c3fa1c3289e8e7",
+    "type": "influxdb",
+    "hostname": "YOUR_INFLUXDB_HOST",
+    "port": 8086,
+    "protocol": "http",
+    "database": "database",
+    "name": "Cloud",
+    "usetls": false,
+    "tls": "",
+    "influxdbVersion": "2.0",
+    "url": "http://YOUR_INFLUXDB_HOST:8086",
+    "timeout": 10,
+    "rejectUnauthorized": true
+  }
+]

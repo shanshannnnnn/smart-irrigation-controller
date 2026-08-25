@@ -1,0 +1,24 @@
+# ---- Secrets: never commit these ----------------------------------------
+# Real values live only on your machine. Templates are provided as
+# credentials.example.h / cert.example.h
+credentials.h
+cert.h
+*_cred.json
+.env
+
+# ---- Arduino / PlatformIO build output -----------------------------------
+build/
+.pio/
+*.elf
+*.bin
+*.hex
+*.map
+
+# ---- Editors / OS --------------------------------------------------------
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- Archives ------------------------------------------------------------
+*.zip
